@@ -74,10 +74,10 @@ export default {
   	  let horizontal = {};
       if (this.elmLeft + this.maxW < this.winW) {
         this.arrow = 'drop-menu-left';
-      	horizontal = { left: `${this.elmLeft + (this.elmW / 2) }px`}
+      	horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 20) }px`}
       }else {
       	this.arrow = 'drop-menu-right';
-        horizontal = { right: `${this.winW - this.elmLeft - (this.elmW / 2) }px`};
+        horizontal = { right: `${this.winW - this.elmLeft - (this.elmW / 2) - 20 }px`};
       }
       result.top = top;
       return Object.assign(result, horizontal);
