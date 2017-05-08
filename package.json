@@ -1,6 +1,6 @@
 {
   "name": "vue-dropmenu",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Vue.js project",
   "author": "ybb",
   "main": "./lib/drop-menu.min.js",
