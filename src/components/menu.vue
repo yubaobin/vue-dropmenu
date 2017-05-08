@@ -74,10 +74,10 @@ export default {
   	  let horizontal = {};
       if (this.elmLeft + this.maxW < this.winW) {
         this.arrow = 'drop-menu-left';
-      	horizontal = { left: `${this.elmLeft}px`}
+      	horizontal = { left: `${this.elmLeft + (this.elmW / 2) }px`}
       }else {
       	this.arrow = 'drop-menu-right';
-        horizontal = { right: `${this.winW - this.elmLeft - this.elmW}px`};
+        horizontal = { right: `${this.winW - this.elmLeft - (this.elmW / 2) }px`};
       }
       result.top = top;
       return Object.assign(result, horizontal);
@@ -95,7 +95,7 @@ ul,li {
   top: 50px;
   position: absolute;
   background-color: #080707;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 .drop-menu:before {
   content: '';
