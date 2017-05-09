@@ -29,6 +29,7 @@ export default {
     }
   },
   created() {
+    this.$on('handleItemClick', this.handleItemClick);
   },
   props: {
     target: {
@@ -57,8 +58,10 @@ export default {
     }
   },
   methods: {
-  	handleItemClick(e) {
-      console.log(e);
+  	handleItemClick(child) {
+      for (const item of this.$children) {
+        item.$data.activeIndex = child.index
+      }
   	},
     open(e) {
       this.show = true;
