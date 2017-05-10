@@ -3,9 +3,9 @@
     <drop-menu ref="dropMenu" target=".container">
       <menu-item @click="showTitle" index="1">1. 编辑</menu-item>
       <menu-item @click="showTitle" index="2">2. 只显示标题</menu-item>
+      <menu-item @click="showTitle" index="3">3. 只显示标题</menu-item>
     </drop-menu>
-    <button @click="showMenu" class="btn">点击</button>
-    <div class="container"></div>
+    <button @click="showMenu" class="btn container">点击</button>
   </div>
 </template>
 
@@ -31,10 +31,8 @@ export default {
 <style scoped>
 .container {
   position: absolute;
-  top: 50%;
-  left: 10%;
-  width: 100px;
-  height: 100px;
+  bottom: 0%;
+  left: 0%;
   background-color: #000;
 }
 </style>

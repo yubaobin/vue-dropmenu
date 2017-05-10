@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <ul class="drop-menu" :class="arrow" v-show="show" :style="cssStyle">
+    <ul class="drop-menu" :class="[h, v]" v-show="show" :style="cssStyle">
 	  <slot></slot>	
     </ul>
   </transition>
@@ -12,9 +12,12 @@ export default {
   name: 'drop-menu',
   data() {
     return {
-      arrow: 'drop-menu-left',
+      h: 'drop-menu-left',
+      v: 'drop-menu-top',
       maxW: 120,
+      maxH: 120,
       winW: 0,
+      winH: 0,
       elmTop: 0,
       elmLeft: 0,
       elmH: 0,
@@ -49,7 +52,8 @@ export default {
     if (!this.target) {
       throw new Error('Please setup the target attr !');
     }else {
-      this.winW = document.documentElement.offsetWidth;
+      this.winW = window.innerWidth;
+      this.winH = window.innerHeight;
       const elm = document.querySelector(this.target);
       this.elmTop = elm.offsetTop;
       this.elmLeft = elm.offsetLeft;
@@ -72,18 +76,24 @@ export default {
   },
   computed: {
   	cssStyle() {
-  	  let result = {};
   	  let top = `${this.elmTop + this.elmH + 8}px`;
+      let vertical = {};
   	  let horizontal = {};
       if (this.elmLeft + this.maxW < this.winW) {
-        this.arrow = 'drop-menu-left';
+        this.h = 'drop-menu-left';
       	horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 20) }px`}
       }else {
-      	this.arrow = 'drop-menu-right';
+      	this.h = 'drop-menu-right';
         horizontal = { right: `${this.winW - this.elmLeft - (this.elmW / 2) - 20 }px`};
       }
-      result.top = top;
-      return Object.assign(result, horizontal);
+      if (this.elmTop + this.elmH + this.maxH < this.winH) {
+        this.v = 'drop-menu-top';
+        vertical = { top : `${this.elmTop + this.elmH + 8}px`};
+      } else {
+        this.v = 'drop-menu-down';
+        vertical = { bottom : `${this.winH - this.elmTop + 10}px`};
+      }
+      return Object.assign(horizontal, vertical);
   	},
   },
 }
@@ -95,12 +105,11 @@ ul,li {
   padding: 0;
 }
 .drop-menu {
-  top: 50px;
   position: absolute;
   background-color: #080707;
   border-radius: 5px;
 }
-.drop-menu:before {
+.drop-menu-top:before {
   content: '';
   position: absolute;
   width: 0;
@@ -116,19 +125,32 @@ ul,li {
 .drop-menu-left:before {
   left: 10px;
 }
-.drop-menu-center:before {
-  left: 50%;
-  transform: translate(-50%, 0);
+
+.drop-menu-down:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-width: 10px;
+  border-style: solid;
+  bottom: -20px;
+  border-color: #080707 transparent transparent transparent;
+}
+.drop-menu-right:after {
+  right: 10px;
+}
+.drop-menu-left:after {
+  left: 10px;
 }
 .fade-enter-active,
 .fade-leave-active,
 .fade-transition {
--webkit-transition: opacity .3s ease;
-transition: opacity .3s ease;
+  -webkit-transition: opacity .3s ease;
+  transition: opacity .3s ease;
 }
 .fade-enter,
 .fade-leave,
 .fade-leave-active {
-opacity: 0;
+  opacity: 0;
 }
 </style>
