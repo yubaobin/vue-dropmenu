@@ -2,6 +2,8 @@
 
 > vue 弹出菜单
 
+# Demo 
+Demo [https://yubaobin.github.io/vue-dropmenu](https://yubaobin.github.io/vue-dropmenu)
 ## 使用
 
 ```bash
