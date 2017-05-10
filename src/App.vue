@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <drop-menu ref="dropMenu" target=".container">
-      <menu-item @click="itemClick" index="1">1. 编辑</menu-item>
-      <menu-item @click="itemClick" index="2">2. 只显示标题</menu-item>
+      <menu-item @click="showTitle" index="1">1. 编辑</menu-item>
+      <menu-item @click="showTitle" index="2">2. 只显示标题</menu-item>
     </drop-menu>
     <button @click="showMenu" class="btn">点击</button>
     <div class="container"></div>
@@ -21,7 +21,7 @@ export default {
   	showMenu() {
   	  this.$refs.dropMenu.open();
   	},
-  	itemClick(e) {
+  	showTitle() {
       console.log('点击');
   	}
   }
