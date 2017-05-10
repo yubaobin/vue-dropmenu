@@ -55,10 +55,14 @@ export default {
       this.winW = window.innerWidth;
       this.winH = window.innerHeight;
       const elm = document.querySelector(this.target);
-      this.elmTop = elm.offsetTop;
-      this.elmLeft = elm.offsetLeft;
-      this.elmH = elm.offsetHeight;
-      this.elmW = elm.offsetWidth;
+      if (elm) {
+        this.elmTop = elm.offsetTop;
+        this.elmLeft = elm.offsetLeft;
+        this.elmH = elm.offsetHeight;
+        this.elmW = elm.offsetWidth;
+      }else {
+        throw new Error('target not found!');
+      }
     }
   },
   methods: {
