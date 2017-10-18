@@ -1,14 +1,16 @@
 <template>
   <transition name="fade">
     <ul class="drop-menu" :class="[h, v]" v-show="show" :style="cssStyle">
-	  <slot></slot>	
+      <div class="arrow" :style="{ 'border-color': `${bgColor} ${bgColor} transparent transparent` }"></div>
+      <li class="menu-item" v-for="(item, index) in list"
+          :style="{ 'border-color': borderColor, 'text-align': align, padding, 'font-size': `${size}px`, color: changeColor[index] }"
+          @click="handleClick($event, item)"> {{ item.name }}
+      </li>
     </ul>
   </transition>
 </template>
 <script>
-import createBodyClickListener from '../body-click-listener'
-
-export default {
+  export default {
   name: 'drop-menu',
   data() {
     return {
@@ -16,6 +18,8 @@ export default {
       v: 'drop-menu-top',
       maxW: 120,
       maxH: 120,
+      parentW: 0,
+      parentH: 0,
       winW: 0,
       winH: 0,
       elmTop: 0,
@@ -23,39 +27,84 @@ export default {
       elmH: 0,
       elmW: 0,
       w: 0,
-      show: false,
-      bodyClickListener: createBodyClickListener((e) => {
-        if(!this.$el.contains(e.target)) {
-          this.show = false;
-        }
-      }),
+      colors: [],
+      changeColor: [],
+      activeObj: {},
     }
   },
   created() {
-    this.$on('handleItemClick', this.handleItemClick);
+    this.colors = new Array(this.list.length);
+    this.colors.fill(this.fontColor);
+    this.changeColor = [...this.colors];
+    this.changeColor[this.activeIndex] = this.activeColor;
   },
   props: {
     target: {
       type: String,
+    },
+    show: {
+      type: Boolean,
+      default: false
+    },
+    list: {
+      type: Array,
+      default: null
+    },
+    bgColor: {
+      type: String,
+      default: '#080707'
+    },
+    radius: {
+      type: String,
+      default: '3px'
+    },
+    borderColor: {
+      type: String,
+      default: '#888888'
+    },
+    align: {
+      type: String,
+      default: 'left'
+    },
+    size: {
+      type: Number,
+      default: 16
+    },
+    activeColor: {
+      type: String,
+      default: '#20A0FF'
+    },
+    fontColor: {
+      type: String,
+      default: '#E8E8E8'
+    },
+    activeIndex: {
+      type: Number,
+      default: 0
+    },
+    padding: {
+      type: String,
+      default: '6px 15px 6px 6px'
     }
   },
   watch: {
-    show(newValue, oldValue) {
-      if(newValue) {
-        this.bodyClickListener.start();
-      }else {
-        this.bodyClickListener.stop();
-      }
+    activeObj(newValue, oldValue) {
+      const index = this.list.findIndex(elem => elem.name === newValue.name);
+      this.changeColor = [...this.colors];
+      this.changeColor[index] = this.activeColor;
     }
   },
   mounted() {
     if (!this.target) {
       throw new Error('Please setup the target attr !');
     }else {
-      this.winW = window.innerWidth;
-      this.winH = window.innerHeight;
       const elm = document.querySelector(this.target);
       if (elm) {
+        this.winW = document.documentElement.clientWidth;
+        this.winH = document.documentElement.clientHeight;
+        const parent = elm.parentNode;
+        this.parentW = parent.offsetWidth;
+        this.parentH = parent.offsetHeight;
         this.elmTop = elm.offsetTop;
         this.elmLeft = elm.offsetLeft;
         this.elmH = elm.offsetHeight;
@@ -66,10 +115,9 @@ export default {
     }
   },
   methods: {
-  	handleItemClick(child) {
-      for (const item of this.$children) {
-        item.$data.activeIndex = child.index
-      }
+  	handleClick(e, obj) {
+      this.activeObj = obj;
+      this.$emit('click', e, obj);
   	},
     open(e) {
       this.show = true;
@@ -83,21 +131,23 @@ export default {
   	  let top = `${this.elmTop + this.elmH + 8}px`;
       let vertical = {};
   	  let horizontal = {};
+  	  let normalCss = {};
       if (this.elmLeft + this.maxW < this.winW) {
         this.h = 'drop-menu-left';
-      	horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 20) }px`}
+      	horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 10) }px`}
       }else {
       	this.h = 'drop-menu-right';
-        horizontal = { right: `${this.winW - this.elmLeft - (this.elmW / 2) - 20 }px`};
+        horizontal = { right: `${this.parentW - this.elmLeft - (this.elmW / 2) - 10 }px`};
       }
       if (this.elmTop + this.elmH + this.maxH < this.winH) {
         this.v = 'drop-menu-top';
         vertical = { top : `${this.elmTop + this.elmH + 8}px`};
       } else {
         this.v = 'drop-menu-down';
-        vertical = { bottom : `${this.winH - this.elmTop + 10}px`};
+        vertical = { bottom : `${this.parentH - this.elmTop + 10}px`};
       }
-      return Object.assign(horizontal, vertical);
+      normalCss = { 'background-color': this.bgColor, 'border-radius': this.radius }
+      return Object.assign(horizontal, vertical, normalCss);
   	},
   },
 }
@@ -110,42 +160,53 @@ ul,li {
 }
 .drop-menu {
   position: absolute;
-  background-color: #080707;
-  border-radius: 5px;
 }
-.drop-menu-top:before {
-  content: '';
+.drop-menu-top .arrow {
   position: absolute;
   width: 0;
   height: 0;
-  border-width: 10px;
-  border-style: solid;
-  top: -18px;
-  border-color: transparent transparent #080707 transparent;
+  border: 3px solid;
+  top: -3px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
 }
-.drop-menu-right:before {
+.drop-menu-right .arrow {
   right: 10px;
 }
-.drop-menu-left:before {
+.drop-menu-left .arrow {
   left: 10px;
 }
 
-.drop-menu-down:after {
+.drop-menu-down .arrow {
   content: '';
   position: absolute;
   width: 0;
   height: 0;
-  border-width: 10px;
-  border-style: solid;
-  bottom: -20px;
-  border-color: #080707 transparent transparent transparent;
+  border: 3px solid;
+  bottom: -3px;
+  transform: rotate(-225deg);
+  -webkit-transform: rotate(-225deg);
+  -moz-transform: rotate(-225deg);
+  -ms-transform: rotate(-225deg);
+  -o-transform: rotate(-225deg);
 }
-.drop-menu-right:after {
+.drop-menu-right .arrow {
   right: 10px;
 }
-.drop-menu-left:after {
+.drop-menu-left .arrow {
   left: 10px;
 }
+
+.menu-item {
+  border-bottom: 1px solid ;
+}
+.menu-item:last-child {
+  border-bottom: none;
+}
+
 .fade-enter-active,
 .fade-leave-active,
 .fade-transition {

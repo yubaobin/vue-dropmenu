@@ -1,9 +1,7 @@
 import Menu from './menu.vue'
-import MenuItem from './menu-item.vue'
 
 const components = [
-  Menu,
-  MenuItem
+  Menu
 ]
 
 const install = function (Vue, opts = {}) {
