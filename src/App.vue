@@ -7,7 +7,7 @@
     <drop-menu ref="dropMenu1" :show="show1"target=".b1" bgColor="rgba(0,0,0, .6)" :list="list" @click="clickItem"></drop-menu>
     <drop-menu ref="dropMenu2" :show="show2"target=".b2" activeColor="#e26f6f" :list="list" @click="clickItem"></drop-menu>
     <drop-menu ref="dropMenu3" :show="show3"target=".b3" padding="15px" :list="list" @click="clickItem"></drop-menu>
-    <drop-menu ref="dropMenu4" :show="show4"target=".b4" :list="list" @click="clickItem"></drop-menu>
+    <drop-menu ref="dropMenu4" :autoWidth="false" :show="show4"target=".b4" :list="list" @click="clickItem"></drop-menu>
   </div>
 </template>
 
