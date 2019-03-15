@@ -1,6 +1,6 @@
 {
   "name": "vue-awsome-dropmenu",
-  "version": "1.5.0",
+  "version": "2.0.2",
   "description": "dropmenu",
   "author": "ybb",
   "main": "./lib/drop-menu.min.js",
@@ -63,6 +63,10 @@
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
     "webpack-merge": "^2.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yubaobin/vue-dropmenu.git"
   },
   "engines": {
     "node": ">= 4.0.0",
