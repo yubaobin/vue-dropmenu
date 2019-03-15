@@ -2,8 +2,6 @@
 
 > vue 弹出菜单
 
-# Demo
-Demo [https://yubaobin.github.io/vue-dropmenu](https://yubaobin.github.io/vue-dropmenu)
 ## 使用
 
 ```bash
@@ -13,21 +11,38 @@ npm install vue-awsome-dropmenu
 
 ```javascript
 // 引入
-import DropMenu from 'vue-dropmenu';
+import DropMenu from 'vue-awsome-dropmenu';
 Vue.use(DropMenu);
-
-data() {
-  list: [{ name: 1}, { name:2 }]
-}
 ```
 
 ```html
 <!-- 在template使用 与target同一个父节点 -->
-<drop-menu ref="dropMenu" :list="list" target=".sort" class="sortMenu">
+<template>
+<button class="btn b1" @click.stop="openMenu1">打开菜单</button>
+<drop-menu ref="dropMenu" :list="list" target=".b1" class="sortMenu">
 
 </drop-menu>
+</template>
 ```
 
+```javascript
+<script>
+export default {
+  name: 'app',
+  data() {
+  	return {
+  		show1: false,
+  		list: [{ name:'1. 编辑' }, { name:'2. 只显示标题' }, { name:'3. 只显示标题' }]
+  	}
+  },
+  methods: {
+  	openMenu1() {
+			this.show1 = true	
+  	}
+  }
+}
+</script>
+```
 ## API
 
 参数 |  #
@@ -41,6 +56,7 @@ fontColor | 文字颜色
 align | 对其方式: 'center', 'left', 'right'
 borderColor | 列表分割线颜色
 radius | 圆角
+padding | 边界
 list | 列表数据数组对象, 对象必须有name
 show | 显示/隐藏
 

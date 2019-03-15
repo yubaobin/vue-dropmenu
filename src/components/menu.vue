@@ -33,6 +33,7 @@
       colors: [],
       changeColor: [],
       activeObj: {},
+      cssStyle: {}
     }
   },
   created() {
@@ -105,6 +106,30 @@
       const index = this.list.findIndex(elem => elem.name === newValue.name);
       this.changeColor = [...this.colors];
       this.changeColor[index] = this.activeColor;
+    },
+    show(newValue) {
+      if (newValue) {
+        let top = `${this.elmTop + this.elmH + 8}px`;
+        let vertical = {};
+        let horizontal = {};
+        let normalCss = {};
+        if (this.elmX + this.maxW < this.winW) {
+          this.h = 'drop-menu-left';
+          horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 10) }px`}
+        }else {
+          this.h = 'drop-menu-right';
+          horizontal = { right: `${this.parentW - this.elmLeft - (this.elmW / 2) - 10 }px`};
+        }
+        if (this.elmY + this.elmH + this.maxH < this.winH) {
+          this.v = 'drop-menu-top';
+          vertical = { top : `${this.elmTop + this.elmH + 8}px`};
+        } else {
+          this.v = 'drop-menu-down';
+          vertical = { bottom : `${this.parentH - this.elmTop + 10}px`};
+        }
+        normalCss = { 'background-color': this.bgColor, 'border-radius': this.radius }
+        this.cssStyle = Object.assign(horizontal, vertical, normalCss);
+      }
     }
   },
   mounted() {
@@ -150,31 +175,7 @@
       }
       return (m + 1);
     }
-  },
-  computed: {
-  	cssStyle() {
-  	  let top = `${this.elmTop + this.elmH + 8}px`;
-      let vertical = {};
-  	  let horizontal = {};
-  	  let normalCss = {};
-      if (this.elmX + this.maxW < this.winW) {
-        this.h = 'drop-menu-left';
-      	horizontal = { left: `${this.elmLeft + (this.elmW / 2 - 10) }px`}
-      }else {
-      	this.h = 'drop-menu-right';
-        horizontal = { right: `${this.parentW - this.elmLeft - (this.elmW / 2) - 10 }px`};
-      }
-      if (this.elmY + this.elmH + this.maxH < this.winH) {
-        this.v = 'drop-menu-top';
-        vertical = { top : `${this.elmTop + this.elmH + 8}px`};
-      } else {
-        this.v = 'drop-menu-down';
-        vertical = { bottom : `${this.parentH - this.elmTop + 10}px`};
-      }
-      normalCss = { 'background-color': this.bgColor, 'border-radius': this.radius }
-      return Object.assign(horizontal, vertical, normalCss);
-  	},
-  },
+  }
 }
 </script>
 <style scoped>
